@@ -104,8 +104,8 @@ export default function BlogPost() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    loadPost();
-  }, [slug]);
+    loadPost(); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [slug]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const loadPost = async () => {
     if (API_URL) {

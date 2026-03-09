@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './Home.css';
 
@@ -41,7 +41,6 @@ const STATS = [
 ];
 
 export default function Home() {
-  const heroRef = useRef(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
