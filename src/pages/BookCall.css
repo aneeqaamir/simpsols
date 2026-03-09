@@ -1,0 +1,132 @@
+.book-hero {
+  padding-bottom: 60px;
+}
+
+.book-section {
+  background: var(--black);
+}
+
+.book-section__inner {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  gap: 80px;
+  align-items: start;
+}
+
+.book-expect__title {
+  font-size: 1.6rem;
+  margin-bottom: 40px;
+}
+
+.book-expect__steps {
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+  margin-bottom: 40px;
+}
+
+.expect-step {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.expect-step__number {
+  font-size: 2.5rem;
+  color: var(--yellow);
+  line-height: 1;
+  flex-shrink: 0;
+  width: 48px;
+}
+
+.expect-step__title {
+  font-size: 1rem;
+  margin-bottom: 6px;
+}
+
+.expect-step__desc {
+  color: var(--gray-300);
+  font-size: 0.9rem;
+  line-height: 1.75;
+}
+
+.book-note {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  background: var(--gray-800);
+  border: 1px solid var(--gray-600);
+  padding: 20px;
+  border-radius: 4px;
+  margin-top: 20px;
+}
+
+.book-note svg {
+  color: var(--yellow);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.book-note p {
+  font-size: 0.875rem;
+  color: var(--gray-300);
+  line-height: 1.6;
+}
+
+/* Calendly */
+.book-calendly {
+  background: var(--gray-900);
+  border: 1px solid var(--gray-600);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.calendly-inline-widget {
+  width: 100%;
+}
+
+.calendly-placeholder {
+  min-height: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px;
+}
+
+.calendly-placeholder__inner {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.calendly-placeholder__inner svg {
+  color: var(--yellow);
+  opacity: 0.6;
+}
+
+.calendly-placeholder__inner h3 {
+  font-size: 1.3rem;
+}
+
+.calendly-placeholder__inner p {
+  color: var(--gray-400);
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+
+.calendly-placeholder__inner code {
+  background: var(--gray-700);
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-size: 0.8rem;
+  color: var(--yellow);
+}
+
+@media (max-width: 900px) {
+  .book-section__inner {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+}
