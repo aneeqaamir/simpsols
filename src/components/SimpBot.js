@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './SimpBot.css';
 
-const GEMINI_API_KEY = process.env.REACT_APP_GEMINI_API_KEY || 'YOUR_GEMINI_API_KEY';
+const GROQ_API_KEY = process.env.REACT_APP_GROQ_API_KEY || 'YOUR_GROQ_API_KEY';
 
 const SYSTEM_CONTEXT = `You are SimpBot, the AI assistant for SimpSols — a startup-focused digital agency that builds AI tools, software products, and digital systems for founders and businesses.
 
@@ -59,31 +59,33 @@ export default function SimpBot() {
     setLoading(true);
 
     try {
-      const conversationHistory = newMessages
-        .filter(m => m.role !== 'system')
-        .map(m => ({
-          role: m.role === 'assistant' ? 'model' : 'user',
-          parts: [{ text: m.content }]
-        }));
+      const conversationHistory = newMessages.map(m => ({
+        role: m.role === 'assistant' ? 'assistant' : 'user',
+        content: m.content
+      }));
 
       const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`,
+        'https://api.groq.com/openai/v1/chat/completions',
         {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${GROQ_API_KEY}`
+          },
           body: JSON.stringify({
-            system_instruction: { parts: [{ text: SYSTEM_CONTEXT }] },
-            contents: conversationHistory,
-            generationConfig: {
-              temperature: 0.7,
-              maxOutputTokens: 300,
-            }
+            model: 'llama-3.1-8b-instant',
+            messages: [
+              { role: 'system', content: SYSTEM_CONTEXT },
+              ...conversationHistory
+            ],
+            temperature: 0.7,
+            max_tokens: 300,
           })
         }
       );
 
       const data = await response.json();
-      const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text || "Sorry, I couldn't process that. Try again!";
+      const reply = data?.choices?.[0]?.message?.content || "Sorry, I couldn't process that. Try again!";
 
       setMessages(prev => [...prev, { role: 'assistant', content: reply }]);
     } catch (err) {
@@ -105,7 +107,6 @@ export default function SimpBot() {
 
   return (
     <>
-      {/* Chat Window */}
       <div className={`simpbot__window ${open ? 'simpbot__window--open' : ''}`}>
         <div className="simpbot__header">
           <div className="simpbot__header-info">
@@ -118,18 +119,13 @@ export default function SimpBot() {
               </div>
             </div>
           </div>
-          <button className="simpbot__close" onClick={() => setOpen(false)} aria-label="Close">
-            ✕
-          </button>
+          <button className="simpbot__close" onClick={() => setOpen(false)} aria-label="Close">✕</button>
         </div>
 
         <div className="simpbot__messages">
           {messages.map((msg, i) => (
             <div key={i} className={`simpbot__msg simpbot__msg--${msg.role}`}>
-              <div
-                className="simpbot__bubble"
-                dangerouslySetInnerHTML={{ __html: formatMessage(msg.content) }}
-              />
+              <div className="simpbot__bubble" dangerouslySetInnerHTML={{ __html: formatMessage(msg.content) }} />
             </div>
           ))}
           {loading && (
@@ -152,11 +148,7 @@ export default function SimpBot() {
             placeholder="Ask me anything..."
             rows={1}
           />
-          <button
-            className="simpbot__send"
-            onClick={sendMessage}
-            disabled={!input.trim() || loading}
-          >
+          <button className="simpbot__send" onClick={sendMessage} disabled={!input.trim() || loading}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
               <line x1="22" y1="2" x2="11" y2="13" />
               <polygon points="22 2 15 22 11 13 2 9 22 2" />
@@ -165,12 +157,7 @@ export default function SimpBot() {
         </div>
       </div>
 
-      {/* Toggle Button */}
-      <button
-        className={`simpbot__toggle ${open ? 'simpbot__toggle--open' : ''}`}
-        onClick={() => setOpen(!open)}
-        aria-label="Open SimpBot"
-      >
+      <button className={`simpbot__toggle ${open ? 'simpbot__toggle--open' : ''}`} onClick={() => setOpen(!open)} aria-label="Open SimpBot">
         {open ? (
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
             <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
